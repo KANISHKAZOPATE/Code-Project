@@ -1,0 +1,44 @@
+import java.util.PriorityQueue;
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        // Create a priority queue (min-heap) for comparing the node values
+        PriorityQueue<ListNode> minHeap = new PriorityQueue<>((a, b) -> a.val - b.val);
+
+        // Add the first node of each list to the heap
+        for (ListNode list : lists) {
+            if (list != null) {
+                minHeap.offer(list);
+            }
+        }
+
+        // Create a dummy node to help with the result list construction
+        ListNode dummy = new ListNode(0);
+        ListNode current = dummy;
+
+        // Extract the smallest element from the heap and add it to the result list
+        while (!minHeap.isEmpty()) {
+            ListNode smallestNode = minHeap.poll();
+            current.next = smallestNode;
+            current = current.next;
+
+            // If the extracted node has a next node, add it to the heap
+            if (smallestNode.next != null) {
+                minHeap.offer(smallestNode.next);
+            }
+        }
+
+        // Return the merged sorted list starting from dummy.next
+        return dummy.next;
+    }
+}

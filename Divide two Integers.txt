@@ -1,0 +1,37 @@
+class Solution {
+    public int divide(int dividend, int divisor) {
+        // Handle edge case where dividend is Integer.MIN_VALUE and divisor is -1
+        if (dividend == Integer.MIN_VALUE && divisor == -1) {
+            return Integer.MAX_VALUE;
+        }
+
+        // Determine if the result should be positive or negative
+        boolean isNegative = (dividend < 0) ^ (divisor < 0);
+
+        // Work with positive values to simplify the problem
+        long absDividend = Math.abs((long) dividend);
+        long absDivisor = Math.abs((long) divisor);
+
+        int quotient = 0;
+        
+        // Perform division using subtraction and bit shifting
+        while (absDividend >= absDivisor) {
+            long tempDivisor = absDivisor;
+            long multiple = 1;
+
+            // Double the divisor and multiple while the divisor is smaller than the dividend
+            while (absDividend >= (tempDivisor << 1)) {
+                tempDivisor <<= 1;
+                multiple <<= 1;
+            }
+
+            // Subtract the largest possible multiple of divisor from the dividend
+            absDividend -= tempDivisor;
+            quotient += multiple;
+        }
+
+        // Apply the sign to the quotient
+        return isNegative ? -quotient : quotient;
+    }
+}
+

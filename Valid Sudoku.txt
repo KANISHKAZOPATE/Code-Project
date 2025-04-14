@@ -1,0 +1,30 @@
+class Solution {
+    public boolean isValidSudoku(char[][] board) {
+        // Create sets for row, column, and sub-box checks
+        Set<String> seen = new HashSet<>();
+        
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                char num = board[i][j];
+                if (num != '.') {
+                    // Construct a unique string to represent the row, column, and sub-box
+                    String rowKey = "row" + i + num;
+                    String colKey = "col" + j + num;
+                    String boxKey = "box" + (i / 3) + (j / 3) + num;
+                    
+                    // Check if the number is already seen in the row, column, or sub-box
+                    if (seen.contains(rowKey) || seen.contains(colKey) || seen.contains(boxKey)) {
+                        return false;
+                    }
+                    
+                    // Add the keys to the set to mark them as seen
+                    seen.add(rowKey);
+                    seen.add(colKey);
+                    seen.add(boxKey);
+                }
+            }
+        }
+        
+        return true;
+    }
+}
